@@ -80,10 +80,6 @@
 	mount -o remount,commit=20,noatime $DATA_DEVICE /data
 	/sbin/busybox sync
 
-	# dynamic fsync to on
-	echo 1 > /sys/kernel/dyn_fsync/Dyn_fsync_active
-	/sbin/busybox sync
-
 	echo $(date) Boeffla-Kernel default settings 1 applied >> $BOEFFLA_LOGFILE
 
 # Execute early startconfig placed by Boeffla-Config V2 app, if there is one
@@ -148,7 +144,11 @@
 		. $BOEFFLA_STARTCONFIG
 		echo $(date) Startup configuration applied  >> $BOEFFLA_LOGFILE
 	else
-		echo $(date) "No startup configuration found"  >> $BOEFFLA_LOGFILE
+		# dynamic fsync to on
+		echo 1 > /sys/kernel/dyn_fsync/Dyn_fsync_active
+		/sbin/busybox sync
+
+		echo $(date) "No startup configuration found, enable all default settings"  >> $BOEFFLA_LOGFILE
 	fi
 	
 # Turn off debugging for certain modules
