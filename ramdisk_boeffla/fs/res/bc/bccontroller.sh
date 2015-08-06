@@ -1105,7 +1105,7 @@ if [ "apply_system_tweaks" == "$1" ]; then
 		echo "20" > /proc/sys/vm/dirty_ratio
 		echo "500" > /proc/sys/vm/dirty_writeback_centisecs
 		echo "3008" > /proc/sys/vm/min_free_kbytes
-		echo "60" > /proc/sys/vm/swappiness
+		echo "130" > /proc/sys/vm/swappiness
 		echo "100" > /proc/sys/vm/vfs_cache_pressure
 		echo "0" > /proc/sys/vm/drop_caches
 		busybox sleep 0.5s
@@ -1118,7 +1118,7 @@ if [ "apply_system_tweaks" == "$1" ]; then
 		echo "90" > /proc/sys/vm/dirty_ratio
 		echo "500" > /proc/sys/vm/dirty_writeback_centisecs
 		echo "4096" > /proc/sys/vm/min_free_kbytes
-		echo "60" > /proc/sys/vm/swappiness
+		echo "130" > /proc/sys/vm/swappiness
 		echo "10" > /proc/sys/vm/vfs_cache_pressure
 		echo "3" > /proc/sys/vm/drop_caches
 		busybox sleep 0.5s
@@ -1144,7 +1144,7 @@ if [ "apply_system_tweaks" == "$1" ]; then
 		echo "10" > /proc/sys/vm/dirty_ratio
 		echo "100" > /proc/sys/vm/dirty_writeback_centisecs
 		echo "8192" > /proc/sys/vm/min_free_kbytes
-		echo "70" > /proc/sys/vm/swappiness
+		echo "150" > /proc/sys/vm/swappiness
 		echo "500" > /proc/sys/vm/vfs_cache_pressure
 		echo "0" > /proc/sys/vm/drop_caches
 		busybox sleep 0.5s
@@ -1203,57 +1203,17 @@ fi
 if [ "apply_zram" == "$1" ]; then
 
 	busybox swapoff /dev/block/vnswap0
-	busybox swapoff /dev/block/vnswap1
-	busybox swapoff /dev/block/vnswap2
-	busybox swapoff /dev/block/vnswap3
 	busybox sync
 	busybox sleep 0.2s
 	
 	if [ "1" == "$2" ]; then
-		if [ "1" == "$3" ]; then
-			echo "$4" > /sys/block/vnswap0/disksize
-			echo "0" > /sys/block/vnswap1/disksize
-			echo "0" > /sys/block/vnswap2/disksize
-			echo "0" > /sys/block/vnswap3/disksize
-			busybox mkswap /dev/block/vnswap0
-			busybox sleep 0.2s
-			busybox sync
-			busybox swapon -p 2 /dev/block/vnswap0
-			busybox sleep 0.1s
-			busybox sync
-		fi
-		if [ "2" == "$3" ]; then
-			echo "$4" > /sys/block/vnswap0/disksize
-			echo "$4" > /sys/block/vnswap1/disksize
-			echo "0" > /sys/block/vnswap2/disksize
-			echo "0" > /sys/block/vnswap3/disksize
-			busybox mkswap /dev/block/vnswap0
-			busybox mkswap /dev/block/vnswap1
-			busybox sleep 0.2s
-			busybox sync
-			busybox swapon -p 2 /dev/block/vnswap0
-			busybox swapon -p 2 /dev/block/vnswap1
-			busybox sleep 0.1s
-			busybox sync
-		fi
-		if [ "4" == "$3" ]; then
-			echo "$4" > /sys/block/vnswap0/disksize
-			echo "$4" > /sys/block/vnswap1/disksize
-			echo "$4" > /sys/block/vnswap2/disksize
-			echo "$4" > /sys/block/vnswap3/disksize
-			busybox mkswap /dev/block/vnswap0
-			busybox mkswap /dev/block/vnswap1
-			busybox mkswap /dev/block/vnswap2
-			busybox mkswap /dev/block/vnswap3
-			busybox sleep 0.2s
-			busybox sync
-			busybox swapon -p 2 /dev/block/vnswap0
-			busybox swapon -p 2 /dev/block/vnswap1
-			busybox swapon -p 2 /dev/block/vnswap2
-			busybox swapon -p 2 /dev/block/vnswap3
-			busybox sleep 0.1s
-			busybox sync
-		fi
+		echo "$4" > /sys/block/vnswap0/disksize
+		busybox mkswap /dev/block/vnswap0
+		busybox sleep 0.2s
+		busybox sync
+		busybox swapon -p 2 /dev/block/vnswap0
+		busybox sleep 0.1s
+		busybox sync
 		echo "130" > /proc/sys/vm/swappiness
 	fi
 
